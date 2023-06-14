@@ -3,6 +3,7 @@ import "../../Pages/main.css";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate } from "react-router-dom";
+import { updateData } from "../../User/userActions";
 import { updateUserName, setFirstName, setLastName } from "../../User/userReducer";
 const Accounts = [
   {
@@ -41,7 +42,7 @@ function EditUser() {
         event.preventDefault();
         setNewUsername(username);
         dispatch(updateUserName({ userName: username }));
-        updateData(username);
+        dispatch(updateData(username, token));
         setShowForm(false);
         console.log(userName)
       } else {
@@ -49,32 +50,6 @@ function EditUser() {
       }
     };
   
-    const updateData = (username) => {
-    const userData = {
-      userName: username,
-    };
-  
-    fetch("http://localhost:3001/api/v1/user/profile", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(userData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to update user profile");
-        }
-        console.log("Username successfully changed");
-      })
-      .catch((error) => {
-        console.error("Error updating username.");
-        console.log(error);
-      });
-  };
-  
-
     return(
         <>
         {showForm && (
